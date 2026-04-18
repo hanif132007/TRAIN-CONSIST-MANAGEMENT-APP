@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 
-public class UseCase18TrainConsistMgmnt {
+public class UseCase19TrainConsistMgmnt {
 
     static class PassengerBogie {
         String type;
@@ -16,32 +16,33 @@ public class UseCase18TrainConsistMgmnt {
 
         @Override
         public String toString() {
-            return type + " (" + capacity + ")";
+            return type + " (" + capacity + " seats)";
         }
     }
 
     public static void main(String[] args) {
         System.out.println("=========================================================");
-        System.out.println(" UC18 - Filtering with Predicate Interface ");
+        System.out.println(" UC19 - Find Specific Bogie using findFirst() ");
         System.out.println("=========================================================\n");
 
         List<PassengerBogie> bogies = new ArrayList<>();
         bogies.add(new PassengerBogie("Sleeper", 72));
         bogies.add(new PassengerBogie("AC Chair", 56));
         bogies.add(new PassengerBogie("General", 70));
-        bogies.add(new PassengerBogie("Luxury", 24));
+
+        String searchTarget = "AC Chair";
+
+        Optional<PassengerBogie> result = bogies.stream()
+                .filter(b -> b.type.equalsIgnoreCase(searchTarget))
+                .findFirst();
 
 
-        Predicate<PassengerBogie> isHighCapacity = b -> b.capacity >= 60;
-
-        System.out.println("High Capacity Bogies (>= 60):");
-
-        for (PassengerBogie bogie : bogies) {
-            if (isHighCapacity.test(bogie)) {
-                System.out.println("-> " + bogie);
-            }
+        if (result.isPresent()) {
+            System.out.println("Bogie Found: " + result.get());
+        } else {
+            System.out.println("Search Result: No bogie found with type '" + searchTarget + "'");
         }
 
-        System.out.println("\nUC18 predicate filtering completed...");
+        System.out.println("\nUC19 search operation completed...");
     }
 }
